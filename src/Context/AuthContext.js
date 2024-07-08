@@ -34,9 +34,18 @@ function AuthProvider({ children }) {
     setAuthenticated(sit);
   }
 
+  function logout() {
+    setAuthenticated(false);
+    localStorage.removeItem("token");
+    api.defaults.headers.Authorization = undefined;
+    
+  }
+
   return (
     //o value está sendo passado para todas as páginas
-    <Context.Provider value={{ authenticated, signIn }}>{children}</Context.Provider>
+    <Context.Provider value={{ authenticated, signIn, logout }}>
+      {children}
+    </Context.Provider>
   );
 }
 
