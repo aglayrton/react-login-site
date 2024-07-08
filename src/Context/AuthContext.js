@@ -3,15 +3,36 @@ import { api } from "../config/configApi";
 
 const Context = createContext();
 
+//Criação do contexto com a autenticação
 function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  //validacao de acesso a rota
+  const valUser = async () => {
+    const valueToken = localStorage.getItem("token");
+    const headers = {
+      headers: {
+        Authorization: "Bearer " + valueToken,
+      },
+    };
+    await api
+      .get("/usuario", headers)
+      .then((response) => {
+        return true;
+      })
+      .catch(() => {
+        setAuthenticated(false);
+        return false;
+      });
+  };
 
   //Vou verificar se o usuario está logado ou não
   useEffect(() => {
     const getLogin = async () => {
       const token = localStorage.getItem("token");
-      if (token) {
+      //se existe o token e se é valido entao o usuario é autenticado
+      if (token && valUser()) {
         api.defaults.headers.Authorization = `Bearer ${token}`;
         setAuthenticated(true);
       }
