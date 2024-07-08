@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { api } from "../../config/configApi";
 import { useNavigate } from "react-router-dom";
+import { Context } from "../../Context/AuthContext";
 
 export const Login = () => {
   const [user, setUser] = useState({
@@ -14,6 +15,9 @@ export const Login = () => {
     loading: false,
   });
   const navigate = useNavigate();
+
+  const { authenticated, signIn } = useContext(Context);
+  console.log("Situação do usuario " + authenticated);
 
   const valorInput = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -36,6 +40,7 @@ export const Login = () => {
           loading: false,
         });
         localStorage.setItem("token", JSON.stringify(response.data.token));
+        signIn(true);
         return navigate("/dashboard");
       })
       .catch((err) => {
