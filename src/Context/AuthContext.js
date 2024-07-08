@@ -5,15 +5,12 @@ const Context = createContext();
 
 function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
-  //somente para dizer que está carregando
   const [loading, setLoading] = useState(true);
 
   //Vou verificar se o usuario está logado ou não
   useEffect(() => {
-    //aguarde até finalizar a instrução
     const getLogin = async () => {
       const token = localStorage.getItem("token");
-      //se existir o token, a api recebe o cabeçalho de autorização e seta que está autenticado
       if (token) {
         api.defaults.headers.Authorization = `Bearer ${token}`;
         setAuthenticated(true);
@@ -38,7 +35,6 @@ function AuthProvider({ children }) {
     setAuthenticated(false);
     localStorage.removeItem("token");
     api.defaults.headers.Authorization = undefined;
-    
   }
 
   return (
