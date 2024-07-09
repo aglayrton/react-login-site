@@ -14,9 +14,6 @@ function CustomRoute({ isPrivate, roles }) {
     return <Navigate to='/' state={{ from: location }} />;
   }
 
-  //   if (requiredRole && userRole !== requiredRole) {
-  //     return <Navigate to='/not-authorized' state={{ from: location }} />;
-  //   }
   if (roles && !roles.includes(userRole)) {
     return <Navigate to='/not-authorized' state={{ from: location }} />;
   }
