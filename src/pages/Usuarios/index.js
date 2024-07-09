@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../config/configApi";
+import { Link } from "react-router-dom";
 
 export function Usuarios() {
   const [users, setUsers] = useState([]);
@@ -27,6 +28,7 @@ export function Usuarios() {
   }, []);
 
   return (
+   <>
     <h1>
       {users.map((user) => {
         return (
@@ -38,5 +40,7 @@ export function Usuarios() {
         );
       })}
     </h1>
+    <Link to={"/dashboard"}>Voltar</Link>
+   </>
   );
 }
