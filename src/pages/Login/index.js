@@ -16,8 +16,9 @@ export const Login = () => {
   });
   const navigate = useNavigate();
 
-  const { authenticated, signIn } = useContext(Context);
+  const { authenticated, signIn, userRole } = useContext(Context);
   console.log("Situação do usuario " + authenticated);
+  console.log("Situação do usuario " + userRole);
 
   const valorInput = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -40,6 +41,7 @@ export const Login = () => {
           loading: false,
         });
         localStorage.setItem("token", response.data.token);
+        console.log(localStorage.getItem);
         signIn(true);
         return navigate("/dashboard");
       })
