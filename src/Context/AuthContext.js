@@ -9,7 +9,25 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
 
-  // Validar se o usuário está autenticado e o token é válido
+  //Validação de autenticação do usuário
+  useEffect(() => {
+    const checkUserAuthentication = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        if (await valUser()) {
+          api.defaults.headers.Authorization = `Bearer ${token}`;
+          const decodedToken = jwtDecode(token);
+          setAuthenticated(true);
+          setUserRole(decodedToken.nivel);
+        }
+      }
+      setLoading(false);
+    };
+
+    checkUserAuthentication();
+  }, []);
+
+  // Validar se o token é válido
   const valUser = async () => {
     const token = localStorage.getItem("token");
     if (!token) return false;
@@ -31,23 +49,7 @@ function AuthProvider({ children }) {
     }
   };
 
-  useEffect(() => {
-    const checkUserAuthentication = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        if (await valUser()) {
-          api.defaults.headers.Authorization = `Bearer ${token}`;
-          const decodedToken = jwtDecode(token);
-          setAuthenticated(true);
-          setUserRole(decodedToken.nivel);
-        }
-      }
-      setLoading(false);
-    };
-
-    checkUserAuthentication();
-  }, []);
-
+  //aparece na página carregando, caso não dê certo a autenticação
   if (loading) {
     return <h1>Carregando</h1>;
   }
