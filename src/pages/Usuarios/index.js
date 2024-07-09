@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 export function Usuarios() {
   const [users, setUsers] = useState([]);
+  const [status, setStatus] = useState({ erro: "", mensagem: "" });
 
   const getUsers = async () => {
     const headers = {
@@ -19,7 +20,17 @@ export function Usuarios() {
         setUsers(response.data.users);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response) {
+          setStatus({
+            erro: "erro",
+            mensagem: err.response.data.mensagem,
+          });
+        } else {
+          setStatus({
+            erro: "erro",
+            mensagem: "Tente mais tarde",
+          });
+        }
       });
   };
 
@@ -28,19 +39,20 @@ export function Usuarios() {
   }, []);
 
   return (
-   <>
-    <h1>
-      {users.map((user) => {
-        return (
-          <div key={user.id}>
-            <p>{user.name}</p>
-            <p>{user.email}</p>
-            <p>{user.status}</p>
-          </div>
-        );
-      })}
-    </h1>
-    <Link to={"/dashboard"}>Voltar</Link>
-   </>
+    <>
+      {status.erro === "erro" ? <p>{status.mensagem} </p> : ""}
+      <h1>
+        {users.map((user) => {
+          return (
+            <div key={user.id}>
+              <p>{user.name}</p>
+              <p>{user.email}</p>
+              <p>{user.status}</p>
+            </div>
+          );
+        })}
+      </h1>
+      <Link to={"/dashboard"}>Voltar</Link>
+    </>
   );
 }
