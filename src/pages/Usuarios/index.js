@@ -41,17 +41,18 @@ export function Usuarios() {
   return (
     <>
       {status.erro === "erro" ? <p>{status.mensagem} </p> : ""}
-      <h1>
+      <p>
         {users.map((user) => {
           return (
             <div key={user.id}>
               <p>{user.name}</p>
               <p>{user.email}</p>
               <p>{user.status}</p>
+              <hr />
             </div>
           );
         })}
-      </h1>
+      </p>
       <Link to={"/dashboard"}>Voltar</Link>
     </>
   );
