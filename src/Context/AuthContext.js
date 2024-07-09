@@ -4,68 +4,70 @@ import { jwtDecode } from "jwt-decode";
 
 const Context = createContext();
 
-//Criação do contexto com a autenticação
 function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
 
-  //validacao de acesso a rota
+  // Validar se o usuário está autenticado e o token é válido
   const valUser = async () => {
-    const valueToken = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
     const headers = {
       headers: {
-        Authorization: "Bearer " + valueToken,
+        Authorization: "Bearer " + token,
       },
     };
-    await api
-      .get("/usuario", headers)
-      .then(() => {
-        return true;
-      })
-      .catch(() => {
-        setAuthenticated(false);
-        localStorage.removeItem("token");
-        api.defaults.headers.Authorization = undefined;
-        return false;
-      });
+
+    try {
+      await api.get("/usuario", headers);
+      return true;
+    } catch (error) {
+      setAuthenticated(false);
+      localStorage.removeItem("token");
+      api.defaults.headers.Authorization = undefined;
+      return false;
+    }
   };
 
-  //Vou verificar se o usuario está logado ou não
   useEffect(() => {
-    const getLogin = async () => {
+    const checkUserAuthentication = async () => {
       const token = localStorage.getItem("token");
-      //se existe o token e se é valido entao o usuario é autenticado
-      if (token && valUser()) {
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-        const decodedToken = jwtDecode(token);
-        setAuthenticated(true);
-        setUserRole(decodedToken.nivel);
+      if (token) {
+        if (await valUser()) {
+          api.defaults.headers.Authorization = `Bearer ${token}`;
+          const decodedToken = jwtDecode(token);
+          setAuthenticated(true);
+          setUserRole(decodedToken.nivel);
+        }
       }
-      //se deu certo acima, ele não precisa mais carregar
       setLoading(false);
     };
 
-    getLogin();
-  }, [authenticated]);
+    checkUserAuthentication();
+  }, []);
 
-  //aqui somente para apresentar se está carregando ou nao
   if (loading) {
     return <h1>Carregando</h1>;
   }
 
-  async function signIn(sit) {
-    setAuthenticated(sit);
+  async function signIn(token) {
+    localStorage.setItem("token", token);
+    api.defaults.headers.Authorization = "Bearer ${token}";
+    const decodedToken = jwtDecode(token);
+    setUserRole(decodedToken.nivel);
+    setAuthenticated(true);
   }
 
   function logout() {
     setAuthenticated(false);
     localStorage.removeItem("token");
     api.defaults.headers.Authorization = undefined;
+    setUserRole(null); // Resetar a role do usuário
   }
 
   return (
-    //o value está sendo passado para todas as páginas
     <Context.Provider value={{ authenticated, signIn, logout, userRole }}>
       {children}
     </Context.Provider>
