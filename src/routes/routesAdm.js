@@ -5,6 +5,7 @@ import { Login } from "../pages/Login";
 import { useContext } from "react";
 import { Context } from "../Context/AuthContext";
 import { Usuarios } from "../pages/Usuarios";
+import AddUsuarios from "../pages/AddUsusuarios";
 
 function CustomRoute({ isPrivate, roles }) {
   const { authenticated, userRole } = useContext(Context);
@@ -31,8 +32,11 @@ export default function RoutesAdm() {
       >
         <Route path='/dashboard/*' element={<Dashboard />} />
       </Route>
-      <Route element={<CustomRoute isPrivate={true} roles={["cliente"]} />}>
+      <Route
+        element={<CustomRoute isPrivate={true} roles={["administrador"]} />}
+      >
         <Route path='/usuarios/*' element={<Usuarios />} />
+        <Route path='/add' element={<AddUsuarios />} />
       </Route>
       <Route path='/' element={<Login />} />
       <Route path='*' element={<NotFound />} />
