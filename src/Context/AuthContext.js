@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { api } from "../config/configApi";
+import { jwtDecode } from "jwt-decode";
 
 const Context = createContext();
 
@@ -7,6 +8,7 @@ const Context = createContext();
 function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState(null);
 
   //validacao de acesso a rota
   const valUser = async () => {
@@ -18,11 +20,13 @@ function AuthProvider({ children }) {
     };
     await api
       .get("/usuario", headers)
-      .then((response) => {
+      .then(() => {
         return true;
       })
       .catch(() => {
         setAuthenticated(false);
+        localStorage.removeItem("token");
+        api.defaults.headers.Authorization = undefined;
         return false;
       });
   };
@@ -34,14 +38,16 @@ function AuthProvider({ children }) {
       //se existe o token e se é valido entao o usuario é autenticado
       if (token && valUser()) {
         api.defaults.headers.Authorization = `Bearer ${token}`;
+        const decodedToken = jwtDecode(token);
         setAuthenticated(true);
+        setUserRole(decodedToken.nivel);
       }
       //se deu certo acima, ele não precisa mais carregar
       setLoading(false);
     };
 
     getLogin();
-  }, []);
+  }, [authenticated]);
 
   //aqui somente para apresentar se está carregando ou nao
   if (loading) {
@@ -60,7 +66,7 @@ function AuthProvider({ children }) {
 
   return (
     //o value está sendo passado para todas as páginas
-    <Context.Provider value={{ authenticated, signIn, logout }}>
+    <Context.Provider value={{ authenticated, signIn, logout, userRole }}>
       {children}
     </Context.Provider>
   );
