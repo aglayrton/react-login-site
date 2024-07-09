@@ -6,12 +6,19 @@ import { useContext } from "react";
 import { Context } from "../Context/AuthContext";
 import { Usuarios } from "../pages/Usuarios";
 
-function CustomRoute({ isPrivate }) {
-  const { authenticated } = useContext(Context);
+function CustomRoute({ isPrivate, roles }) {
+  const { authenticated, userRole } = useContext(Context);
   const location = useLocation();
 
   if (isPrivate && !authenticated) {
     return <Navigate to='/' state={{ from: location }} />;
+  }
+
+  //   if (requiredRole && userRole !== requiredRole) {
+  //     return <Navigate to='/not-authorized' state={{ from: location }} />;
+  //   }
+  if (roles && !roles.includes(userRole)) {
+    return <Navigate to='/not-authorized' state={{ from: location }} />;
   }
 
   return <Outlet />;
@@ -20,8 +27,14 @@ function CustomRoute({ isPrivate }) {
 export default function RoutesAdm() {
   return (
     <Routes>
-      <Route element={<CustomRoute isPrivate={true} />}>
+      <Route
+        element={
+          <CustomRoute isPrivate={true} roles={["administrador", "cliente"]} />
+        }
+      >
         <Route path='/dashboard/*' element={<Dashboard />} />
+      </Route>
+      <Route element={<CustomRoute isPrivate={true} roles={["cliente"]} />}>
         <Route path='/usuarios/*' element={<Usuarios />} />
       </Route>
       <Route path='/' element={<Login />} />
