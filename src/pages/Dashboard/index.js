@@ -17,7 +17,14 @@ function Dashboard() {
       <h1>DASH</h1>
       <p>{token}</p>
       <p>{userRole}</p>
-      <Link to={"/usuarios"}>usuarios</Link>
+      {userRole === "administrador" && (
+        <React.Fragment>
+          <Link to={"/usuarios"}>Usuários</Link>
+          <br />
+          <Link to={"/add"}>Adicionar Usuário</Link>
+        </React.Fragment>
+        
+      )}
       <button type='button' onClick={logout}>
         Sair
       </button>
