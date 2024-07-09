@@ -1,21 +1,23 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../../Context/AuthContext";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const token = localStorage.getItem("token");
   const { authenticated, logout, userRole } = useContext(Context);
 
-  // Utilize useEffect para monitorar mudanças em authenticated e userRole
+  // useEffect para monitorar mudanças em authenticated e userRole
   useEffect(() => {
-    console.log("Situação do usuário: " + authenticated);
+    console.log("Situação do usuário:" + authenticated);
     console.log("Papel do usuário: " + userRole);
-  }, [authenticated, userRole]);
+  }, [userRole]);
 
   return (
     <React.Fragment>
       <h1>DASH</h1>
       <p>{token}</p>
       <p>{userRole}</p>
+      <Link to={"/usuarios"}>usuarios</Link>
       <button type='button' onClick={logout}>
         Sair
       </button>
