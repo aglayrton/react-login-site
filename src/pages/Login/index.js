@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-
 import { api } from "../../config/configApi";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../Context/AuthContext";
@@ -15,10 +14,7 @@ export const Login = () => {
     loading: false,
   });
   const navigate = useNavigate();
-
-  const { authenticated, signIn, userRole } = useContext(Context);
-  console.log("Situação do usuario " + authenticated);
-  console.log("Situação do usuario " + userRole);
+  const { signIn } = useContext(Context);
 
   const valorInput = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -26,42 +22,36 @@ export const Login = () => {
 
   const loginSubmit = async (e) => {
     e.preventDefault();
-    // console.log(user);
     setStatus({ loading: true });
     const headers = {
       "Content-Type": "application/json",
     };
-    await api
-      .post("/login", user, { headers })
-      .then((response) => {
-        // console.log(response);
+    try {
+      const response = await api.post("/login", user, { headers });
+      setStatus({
+        type: "success",
+        mensagem: response.data.mensagem,
+        loading: false,
+      });
+      await signIn(response.data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      if (err.response) {
         setStatus({
-          type: "sucess",
-          mensagem: response.data.mensagem,
+          type: "error",
+          mensagem: err.response.data.mensagem,
           loading: false,
         });
-        localStorage.setItem("token", response.data.token);
-        console.log(localStorage.getItem);
-        signIn(true);
-        return navigate("/dashboard");
-      })
-      .catch((err) => {
-        if (err.response) {
-          setStatus({
-            type: "error",
-            mensagem: err.response.data.mensagem,
-            loading: false,
-          });
-          console.error("Erro na resposta:", err.response.data);
-          console.error("Status:", err.response.status);
-          console.error("Headers:", err.response);
-        }
-      });
+        console.error("Erro na resposta:", err.response.data);
+        console.error("Status:", err.response.status);
+        console.error("Headers:", err.response);
+      }
+    }
   };
 
   return (
     <div>
-      <p>{status.type === "sucess" ? status.mensagem : ""}</p>
+      <p>{status.type === "success" ? status.mensagem : ""}</p>
       <p>{status.type === "error" ? status.mensagem : ""}</p>
       <p>{status.loading ? "Validando..." : ""}</p>
       <h1>Login</h1>
