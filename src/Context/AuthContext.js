@@ -54,7 +54,7 @@ function AuthProvider({ children }) {
 
   async function signIn(token) {
     localStorage.setItem("token", token);
-    api.defaults.headers.Authorization = "Bearer ${token}";
+    api.defaults.headers.Authorization = `Bearer ${token}`;
     const decodedToken = jwtDecode(token);
     setUserRole(decodedToken.nivel);
     setAuthenticated(true);
