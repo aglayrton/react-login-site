@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { api } from "../../config/configApi";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export function Usuarios() {
+  const location = useLocation();
+  const { state } = location;
+  console.log(state);
   const [users, setUsers] = useState([]);
   const [status, setStatus] = useState({ erro: "", mensagem: "" });
 
   const getUsers = async () => {
     const headers = {
       headers: {
-        Authorization: "Bearen " + localStorage.getItem("token"),
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
     };
 
@@ -40,8 +43,8 @@ export function Usuarios() {
 
   return (
     <>
-      {status.erro === "erro" ? <p>{status.mensagem} </p> : ""}
-      <p>
+      {state && state.type === "success" && <p>{state.mensagem}</p>}
+      <div>
         {users.map((user) => {
           return (
             <div key={user.id}>
@@ -52,7 +55,7 @@ export function Usuarios() {
             </div>
           );
         })}
-      </p>
+      </div>
       <Link to={"/dashboard"}>Voltar</Link>
     </>
   );
