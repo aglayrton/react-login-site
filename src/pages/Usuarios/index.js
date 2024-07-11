@@ -55,7 +55,9 @@ export function Usuarios() {
               <Link to={"/visualizar/" + user.id}>
                 <button type='button'>visualizar</button>
               </Link>
-
+              <Link to={"/editar/" + user.id}>
+                <button type='button'>Editar</button>
+              </Link>
               <hr />
             </div>
           );
