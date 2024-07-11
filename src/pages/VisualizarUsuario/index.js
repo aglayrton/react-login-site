@@ -42,7 +42,7 @@ export default function VisualizarUsuario() {
 
   useEffect(() => {
     getUser();
-  }, [id]);
+  }, []);
 
   return (
     <div>
