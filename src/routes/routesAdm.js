@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { Context } from "../Context/AuthContext";
 import { Usuarios } from "../pages/Usuarios";
 import AddUsuarios from "../pages/AddUsusuarios";
+import VisualizarUsuario from "../pages/VisualizarUsuario";
 
 function CustomRoute({ isPrivate, roles }) {
   const { authenticated, userRole } = useContext(Context);
@@ -37,6 +38,7 @@ export default function RoutesAdm() {
       >
         <Route path='/usuarios/*' element={<Usuarios />} />
         <Route path='/add' element={<AddUsuarios />} />
+        <Route path='/visualizar/:id' element={<VisualizarUsuario />} />
       </Route>
       <Route path='/' element={<Login />} />
       <Route path='*' element={<NotFound />} />
