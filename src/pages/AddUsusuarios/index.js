@@ -11,6 +11,7 @@ export default function AddUsuarios() {
     name: "",
     email: "",
     password: "",
+    nivel_acesso: "cliente",
   });
 
   const valueInput = (e) => {
