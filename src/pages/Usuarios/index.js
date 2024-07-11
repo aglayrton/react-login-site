@@ -43,6 +43,7 @@ export function Usuarios() {
 
   return (
     <>
+      {status && status.type === "success" && <p>{state.mensagem}</p>}
       {state && state.type === "success" && <p>{state.mensagem}</p>}
       <div>
         {users.map((user) => {
@@ -51,6 +52,10 @@ export function Usuarios() {
               <p>{user.name}</p>
               <p>{user.email}</p>
               <p>{user.status}</p>
+              <Link to={"/visualizar/" + user.id}>
+                <button type='button'>visualizar</button>
+              </Link>
+
               <hr />
             </div>
           );
