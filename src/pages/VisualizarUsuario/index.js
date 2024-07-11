@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../config/configApi";
 import { useParams } from "react-router-dom";
 
-export default function VisualizarUsuario(props) {
+export default function VisualizarUsuario() {
   const { id } = useParams(); // Use useParams para obter o id da URL
   console.log(id);
   const [status, setStatus] = useState({ erro: "", mensagem: "" });
@@ -46,6 +46,7 @@ export default function VisualizarUsuario(props) {
 
   return (
     <div>
+      {status && <p>{status.erro}</p>}
       <h1>Detalhe do usuário</h1>
       {usuario && <p>{usuario.name}</p>}
     </div>
