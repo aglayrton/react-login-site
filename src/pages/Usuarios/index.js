@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../config/configApi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { servDelete } from "../../services/servDelete";
 
 export function Usuarios() {
   const location = useLocation();
@@ -70,16 +71,29 @@ export function Usuarios() {
   };
 
   const desativar = async (id) => {
-    await api
-      .delete("/desativar/" + id, headers)
-      .then((response) => {
-        console.log(response);
-        setStatus({
-          erro: response.data.erro,
-          mensagem: response.data.mensagem,
-        });
-      })
-      .catch((err) => {});
+    const response = await servDelete(id);
+    console.log(response);
+    if (response) {
+      setStatus({
+        erro: false,
+        mensagem: response.mensagem,
+      });
+    } else {
+      setStatus({
+        erro: false,
+        mensagem: "Erro ao desativar, tente mais tarde ",
+      });
+    }
+    // await api
+    //   .delete("/desativar/" + id, headers)
+    //   .then((response) => {
+    //     console.log(response);
+    //     setStatus({
+    //       erro: response.data.erro,
+    //       mensagem: response.data.mensagem,
+    //     });
+    //   })
+    //   .catch((err) => {});
   };
 
   return (
