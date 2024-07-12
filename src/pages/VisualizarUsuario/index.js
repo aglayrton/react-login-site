@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { servDelete } from "../../services/servDelete";
 import { api } from "../../config/configApi";
 import { Link, useParams } from "react-router-dom";
 
@@ -44,14 +45,35 @@ export default function VisualizarUsuario() {
     getUser();
   }, []);
 
+  const desativar = async (id) => {
+    const response = await servDelete(id);
+    console.log(response);
+    if (response) {
+      setStatus({
+        erro: false,
+        mensagem: response.mensagem,
+      });
+    } else {
+      setStatus({
+        erro: false,
+        mensagem: "Erro ao desativar, tente mais tarde ",
+      });
+    }
+  };
+
   return (
     <div>
       <Link to={"/usuarios"}>Listar Usuários</Link>
       <br />
       <Link to={"/dashboard"}>Dashboard</Link>
-      {status && <p>{status.erro}</p>}
+      {status && <p>{status.mensagem}</p>}
       <h1>Detalhe do usuário</h1>
       {usuario && <p>{usuario.name}</p>}
+      <button onClick={() => desativar(usuario.id)}>Destivar</button>
+      {"|"}
+      <Link to={"/editar/" + usuario.id}>
+        <button type='button'>Editar</button>
+      </Link>
     </div>
   );
 }
