@@ -8,6 +8,7 @@ export default function AddUsuarios() {
     mensagem: "",
   });
   const [user, setUser] = useState({
+    status: "",
     name: "",
     email: "",
     password: "",
@@ -58,6 +59,7 @@ export default function AddUsuarios() {
       <Link to={"/dashboard"}>Dashboard</Link>
       <h1>Adicionar Usuários</h1>
       <form onSubmit={addUser}>
+        <input type="hidden" name="status" value={0} />
         <input
           name='name'
           placeholder='Digite o nome do usuário'
