@@ -10,6 +10,8 @@ function EditarUsuario() {
     id: "",
     name: "",
     email: "",
+    status: "",
+    nivel_acesso: "",
     senha: "",
   });
 
@@ -22,7 +24,7 @@ function EditarUsuario() {
     authorization: "Bearer " + localStorage.getItem("token"),
   };
 
-  const getUsers = useCallback(async () => {
+  const getUsers = async () => {
     try {
       const response = await api.get("/usuario/" + id, { headers });
       setUsuario({
@@ -30,16 +32,18 @@ function EditarUsuario() {
         name: response.data.users.name || "",
         email: response.data.users.email || "",
         senha: "", // senha não deve ser retornada pelo backend
+        status: response.data.users.status || "", // Campo status
+        nivel_acesso: response.data.users.nivel_acesso || "", // Novo campo tipo
       });
       console.log(response.data);
     } catch (err) {
       console.log(err);
     }
-  }, [id]);
+  };
 
   useEffect(() => {
     getUsers();
-  }, [getUsers]);
+  }, []);
 
   const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -49,25 +53,22 @@ function EditarUsuario() {
     }));
   }, []);
 
-  const handleSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
-      try {
-        await api.put("/usuario", usuario, { headers });
-        setStatus({
-          type: "success",
-          mensagem: "Usuário atualizado com sucesso!",
-        });
-      } catch (err) {
-        setStatus({
-          type: "error",
-          mensagem: "Erro ao atualizar usuário!",
-        });
-        console.log(err);
-      }
-    },
-    [usuario, headers]
-  );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await api.put("/usuario", usuario, { headers });
+      setStatus({
+        type: "success",
+        mensagem: "Usuário atualizado com sucesso!",
+      });
+    } catch (err) {
+      setStatus({
+        type: "error",
+        mensagem: "Erro ao atualizar usuário!",
+      });
+      console.log(err);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -91,6 +92,37 @@ function EditarUsuario() {
           value={usuario.email || ""}
           onChange={handleInputChange}
         />
+        <select
+          name='status'
+          value={usuario.status || ""}
+          onChange={handleInputChange}
+        >
+          <option value=''>Selecione o status</option>
+          <option value='1'>Ativo</option>
+          <option value='0'>Inativo</option>
+        </select>
+        <div>
+          <label>
+            <input
+              type='radio'
+              name='nivel_acesso'
+              value='administrador'
+              checked={usuario.nivel_acesso === "administrador"}
+              onChange={handleInputChange}
+            />
+            Administrador
+          </label>
+          <label>
+            <input
+              type='radio'
+              name='nivel_acesso'
+              value='cliente'
+              checked={usuario.nivel_acesso === "cliente"}
+              onChange={handleInputChange}
+            />
+            Cliente
+          </label>
+        </div>
         <input
           type='password'
           name='senha'
