@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../config/configApi";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export function Usuarios() {
   const location = useLocation();
@@ -9,13 +9,13 @@ export function Usuarios() {
   const [users, setUsers] = useState([]);
   const [status, setStatus] = useState({ erro: "", mensagem: "" });
 
-  const getUsers = async () => {
-    const headers = {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    };
+  const headers = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  };
 
+  const getUsers = async () => {
     await api
       .get("/usuario", headers)
       .then((response) => {
@@ -40,10 +40,51 @@ export function Usuarios() {
   useEffect(() => {
     getUsers();
   }, []);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (state && state.type === "success") {
+      const timer = setTimeout(() => {
+        navigate(location.pathname, { replace: true, state: {} });
+      }, 3000);
+      return () => clearTimeout(timer); // Limpar o timeout se o componente desmontar
+    }
+  }, [state, location.pathname, navigate]);
+
+  const apagar = async (id) => {
+    await api
+      .delete("/usuario/" + id, headers)
+      .then((response) => {
+        console.log(response.data);
+        getUsers();
+      })
+      .catch((err) => {
+        if (err.response) {
+          setStatus({ erro: "erro", mensagem: "Errado" });
+        } else {
+          setStatus({
+            erro: "erro",
+            mensagem: "Tente mais tarde",
+          });
+        }
+      });
+  };
+
+  const desativar = async (id) => {
+    await api
+      .delete("/desativar/" + id, headers)
+      .then((response) => {
+        console.log(response);
+        setStatus({
+          erro: response.data.erro,
+          mensagem: response.data.mensagem,
+        });
+      })
+      .catch((err) => {});
+  };
 
   return (
     <>
-      {status && status.type === "success" && <p>{state.mensagem}</p>}
+      {status && status.erro === false && <p>{status.mensagem}</p>}
       {state && state.type === "success" && <p>{state.mensagem}</p>}
       <div>
         {users.map((user) => {
@@ -58,6 +99,8 @@ export function Usuarios() {
               <Link to={"/editar/" + user.id}>
                 <button type='button'>Editar</button>
               </Link>
+              <button onClick={() => apagar(user.id)}>Deletar</button>
+              <button onClick={() => desativar(user.id)}>Destivar</button>
               <hr />
             </div>
           );
