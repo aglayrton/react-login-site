@@ -68,12 +68,18 @@ export default function VisualizarUsuario() {
       <Link to={"/dashboard"}>Dashboard</Link>
       {status && <p>{status.mensagem}</p>}
       <h1>Detalhe do usuário</h1>
-      {usuario && <p>{usuario.name}</p>}
-      <button onClick={() => desativar(usuario.id)}>Destivar</button>
-      {"|"}
-      <Link to={"/editar/" + usuario.id}>
-        <button type='button'>Editar</button>
-      </Link>
+      {usuario ? (
+        <div>
+          <p>{usuario.name}</p>
+          <button onClick={() => desativar(usuario.id)}>Desativar</button>
+          {"|"}
+          <Link to={"/editar/" + usuario.id}>
+            <button type='button'>Editar</button>
+          </Link>
+        </div>
+      ) : (
+        <p>Usuário {id} não encontrado</p>
+      )}
     </div>
   );
 }
