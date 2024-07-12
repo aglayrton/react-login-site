@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../config/configApi";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function VisualizarUsuario() {
   const { id } = useParams(); // Use useParams para obter o id da URL
@@ -46,6 +46,9 @@ export default function VisualizarUsuario() {
 
   return (
     <div>
+      <Link to={"/usuarios"}>Listar Usuários</Link>
+      <br />
+      <Link to={"/dashboard"}>Dashboard</Link>
       {status && <p>{status.erro}</p>}
       <h1>Detalhe do usuário</h1>
       {usuario && <p>{usuario.name}</p>}

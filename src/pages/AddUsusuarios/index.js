@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { api } from "../../config/configApi";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 export default function AddUsuarios() {
   const [status, setStatus] = useState({
@@ -53,6 +53,9 @@ export default function AddUsuarios() {
 
   return (
     <>
+      <Link to={"/usuarios"}>Listar Usuários</Link>
+      <br />
+      <Link to={"/dashboard"}>Dashboard</Link>
       <h1>Adicionar Usuários</h1>
       <form onSubmit={addUser}>
         <input

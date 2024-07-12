@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { api } from "../../config/configApi";
 
 function EditarUsuario() {
@@ -72,6 +72,9 @@ function EditarUsuario() {
 
   return (
     <React.Fragment>
+      <Link to={"/usuarios"}>Listar Usuários</Link>
+      <br />
+      <Link to={"/dashboard"}>Dashboard</Link>
       <h1>Editar</h1>
       <form onSubmit={handleSubmit}>
         <input
