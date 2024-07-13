@@ -39,7 +39,11 @@ export default function AddUsuarios() {
         password: "",
       });
     } catch (error) {
-      console.log("Erro:", error);
+      setStatus({
+        type: "error",
+        mensagem: error.response.data.mensagem,
+      });
+      console.log("Erro:", error.response.data);
     }
   };
 
@@ -54,12 +58,13 @@ export default function AddUsuarios() {
 
   return (
     <>
+      {status.type === "error" ? <p>{status.mensagem}</p> : ""}
       <Link to={"/usuarios"}>Listar Usuários</Link>
       <br />
       <Link to={"/dashboard"}>Dashboard</Link>
       <h1>Adicionar Usuários</h1>
       <form onSubmit={addUser}>
-        <input type="hidden" name="status" value={0} />
+        <input type='hidden' name='status' value={0} />
         <input
           name='name'
           placeholder='Digite o nome do usuário'
