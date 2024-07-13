@@ -9,6 +9,8 @@ export function Usuarios() {
   console.log(state);
   const [users, setUsers] = useState([]);
   const [status, setStatus] = useState({ erro: "", mensagem: "" });
+  const [page, setPage] = useState("");
+  const [lastPage, setLastPage] = useState("");
 
   const headers = {
     headers: {
@@ -16,12 +18,18 @@ export function Usuarios() {
     },
   };
 
-  const getUsers = async () => {
+  const getUsers = async (page) => {
+    if (page == undefined) {
+      page = 1;
+    }
+    setPage(page);
+
     await api
-      .get("/usuario", headers)
+      .get("/usuarios/" + page, headers)
       .then((response) => {
-        console.log(response.data.users);
+        console.log(response.data);
         setUsers(response.data.users);
+        setLastPage(response.data.ultimaPagina);
       })
       .catch((err) => {
         if (err.response) {
@@ -41,7 +49,9 @@ export function Usuarios() {
   useEffect(() => {
     getUsers();
   }, []);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     if (state && state.type === "success") {
       const timer = setTimeout(() => {
@@ -120,6 +130,48 @@ export function Usuarios() {
           );
         })}
       </div>
+      {page !== 1 ? (
+        <button type='button' onClick={() => getUsers(1)}>
+          Primeira
+        </button>
+      ) : (
+        <button type='button' disabled>
+          Primeira
+        </button>
+      )}
+      {page != 1 ? (
+        <button type='button' onClick={() => getUsers(page - 1)}>
+          {page - 1}
+        </button>
+      ) : (
+        ""
+      )}
+      <button type='button' disabled>
+        {page}
+      </button>
+      {page + 1 <= lastPage ? (
+        <button type='button' onClick={() => getUsers(page + 1)}>
+          {page + 1}
+        </button>
+      ) : (
+        ""
+      )}
+
+      {page !== lastPage ? (
+        <button
+          type='button'
+          onClick={() => {
+            getUsers(lastPage);
+          }}
+        >
+          última
+        </button>
+      ) : (
+        <button type='button' disabled>
+          última
+        </button>
+      )}
+      <br />
       <Link to={"/dashboard"}>Voltar</Link>
     </>
   );
