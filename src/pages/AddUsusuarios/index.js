@@ -21,6 +21,9 @@ export default function AddUsuarios() {
 
   const addUser = async (e) => {
     e.preventDefault();
+
+    if (!valid()) return;
+
     const headers = {
       "Content-Type": "application/json",
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -46,6 +49,13 @@ export default function AddUsuarios() {
       console.log("Erro:", error.response.data);
     }
   };
+
+  function valid() {
+    if (!user.name) return setStatus({
+      type: "error",
+      mensagem: "Necessário preencher o campo nome front",
+    });
+  }
 
   if (status.type === "success") {
     return (
