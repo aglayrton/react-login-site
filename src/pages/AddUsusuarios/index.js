@@ -51,10 +51,12 @@ export default function AddUsuarios() {
   };
 
   function valid() {
-    if (!user.name) return setStatus({
-      type: "error",
-      mensagem: "Necessário preencher o campo nome front",
-    });
+    if (!user.name)
+      return setStatus({
+        type: "error",
+        mensagem: "Necessário preencher o campo nome front",
+      });
+    return true;
   }
 
   if (status.type === "success") {
