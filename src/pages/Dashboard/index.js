@@ -23,7 +23,9 @@ function Dashboard() {
           <br />
           <Link to={"/add"}>Adicionar Usuário</Link>
           <br />
-          <Link to={"/perfil"}>Usuários</Link>
+          <Link to={"/perfil"}>Meu Perfil</Link>
+          <br />
+          <Link to={"/perfil-edit"}>Editar Meu Perfil</Link>
         </React.Fragment>
       )}
       <button type='button' onClick={logout}>
