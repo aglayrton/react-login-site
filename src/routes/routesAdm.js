@@ -8,6 +8,7 @@ import { Usuarios } from "../pages/Usuarios";
 import AddUsuarios from "../pages/AddUsusuarios";
 import VisualizarUsuario from "../pages/VisualizarUsuario";
 import EditarUsuario from "../pages/EditUsuarios";
+import Perfil from "../pages/Perfil";
 
 function CustomRoute({ isPrivate, roles }) {
   const { authenticated, userRole } = useContext(Context);
@@ -33,6 +34,7 @@ export default function RoutesAdm() {
         }
       >
         <Route path='/dashboard/*' element={<Dashboard />} />
+        <Route path='/perfil' element={<Perfil />} />
       </Route>
       <Route
         element={<CustomRoute isPrivate={true} roles={["administrador"]} />}
