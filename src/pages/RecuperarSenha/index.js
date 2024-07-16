@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export const RecuperarSenha = () => {
   const [email, setEmail] = useState({
     email: "",
-    url: "http://localhost:3000/update-password/",
+    url: "http://localhost:3000/atualizar-senha/",
   });
   const [status, setStatus] = useState({
     type: "",
