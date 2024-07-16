@@ -10,6 +10,7 @@ import VisualizarUsuario from "../pages/VisualizarUsuario";
 import EditarUsuario from "../pages/EditUsuarios";
 import Perfil from "../pages/Perfil";
 import EditarPerfil from "../pages/EditarPerfil";
+import { RecuperarSenha } from "../pages/RecuperarSenha";
 
 function CustomRoute({ isPrivate, roles }) {
   const { authenticated, userRole } = useContext(Context);
@@ -47,6 +48,7 @@ export default function RoutesAdm() {
         <Route path='/editar/:id' element={<EditarUsuario />} />
       </Route>
       <Route path='/' element={<Login />} />
+      <Route path="/recuperar-senha" element={<RecuperarSenha/>} />
       <Route path='*' element={<NotFound />} />
     </Routes>
   );
