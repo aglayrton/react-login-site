@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { api } from "../../config/configApi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../Context/AuthContext";
 
 export const Login = () => {
@@ -79,6 +79,7 @@ export const Login = () => {
           <button type='submit'>Logar</button>
         )}
       </form>
+      <Link to='/recuperar-senha'>Recuperar Senha</Link>
     </div>
   );
 };
