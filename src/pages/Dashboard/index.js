@@ -23,11 +23,11 @@ function Dashboard() {
           <br />
           <Link to={"/add"}>Adicionar Usuário</Link>
           <br />
-          <Link to={"/perfil"}>Meu Perfil</Link>
-          <br />
-          <Link to={"/perfil-edit"}>Editar Meu Perfil</Link>
         </React.Fragment>
       )}
+      <Link to={"/perfil"}>Meu Perfil</Link>
+      <br />
+      <Link to={"/perfil-edit"}>Editar Meu Perfil</Link>
       <button type='button' onClick={logout}>
         Sair
       </button>
