@@ -57,10 +57,17 @@ export default function Perfil() {
       <Link to={"/dashboard"}>Dashboard</Link>
       {status && <p>{status.mensagem}</p>}
       <h1>Detalhe do Perfil</h1>
+      <Link to={"/perfil-edit"}>Editar Meu Perfil</Link>
+      <br />
+      <Link to={"/perfil-edit-foto"}>Editar Minha Foto</Link>
       {status.type === "error" ? <p>{status.mensagem}</p> : ""}
       {data.name ? <span>{data.name}</span> : ""}
       {data.foto ? (
-        <img src={data.enderecoDaImagem + data.foto} alt='Foto-de-Perfil' style={{width:100, height:100}}/>
+        <img
+          src={data.enderecoDaImagem + data.foto}
+          alt='Foto-de-Perfil'
+          style={{ width: 100, height: 100 }}
+        />
       ) : (
         ""
       )}

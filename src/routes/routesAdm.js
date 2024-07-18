@@ -12,6 +12,7 @@ import Perfil from "../pages/Perfil";
 import EditarPerfil from "../pages/EditarPerfil";
 import { RecuperarSenha } from "../pages/RecuperarSenha";
 import AtualizarSenha from "../pages/AtualizarSenha";
+import EditarPerfilFoto from "../pages/EditarPerfilFoto";
 
 function CustomRoute({ isPrivate, roles }) {
   const { authenticated, userRole } = useContext(Context);
@@ -39,6 +40,7 @@ export default function RoutesAdm() {
         <Route path='/dashboard/*' element={<Dashboard />} />
         <Route path='/perfil' element={<Perfil />} />
         <Route path='/perfil-edit' element={<EditarPerfil />} />
+        <Route path='/perfil-edit-foto' element={<EditarPerfilFoto />} />
       </Route>
       <Route
         element={<CustomRoute isPrivate={true} roles={["administrador"]} />}
